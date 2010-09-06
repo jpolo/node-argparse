@@ -1,0 +1,10 @@
+{
+  "name" : "argparse",
+  "version" : "0.1",
+  "author" : "Julien Polo <julien.polo@altshift.fr>",
+  "description" : "An argparser inspired by the python module",
+  "keywords" : ["parser", "arg", "cli"],
+  "directories" : { "lib" : "lib" , "test": "test"},
+  "dependencies"  : {"vows": ">=0.1"},
+  "main" : "lib/argparse"
+}
