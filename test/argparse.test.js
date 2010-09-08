@@ -14,7 +14,7 @@ vows
 			topic: function (item) {// Topic
 				return new argparse.ArgumentParser({'program' : 'foo-bar'});
 			},
-            'should return the same program attribute': function (topic) {// Vow
+            'should return "foo-bar" as program attribute': function (topic) {// Vow
                 assert.equal(topic.program, 'foo-bar');
             },
 			'should have the default help formatter': function (topic) {// Vow
@@ -28,7 +28,7 @@ vows
 			topic: function (item) {// Topic
 				return new argparse.ArgumentParser({'version' : '0.1'});
 			},
-            'should return have "node" as default program launched': function (topic) {// Vow
+            'should return have "node" as program attribute': function (topic) {// Vow
                 assert.equal(topic.program, 'node');
             },
             'should have the right version': function (topic) {// Vow
@@ -36,19 +36,8 @@ vows
             }
         }
 
-    },
-    
-    'The exit/error methods': {
-    	topic: function (item) {// Topic
-			return new argparse.ArgumentParser({});
-		},
-	    'should return have "node" as default program launched': function (topic) {// Vow
-	        assert.equal(topic.program, 'node');
-	    },
-	    'should have the right version': function (topic) {// Vow
-	    	assert.equal(topic._printMessage('toto'), '0.1');
-	    }
     }
+    
 
 
 }).export(module); // Export the Suite
