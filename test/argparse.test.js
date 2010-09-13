@@ -3,7 +3,7 @@ var assert = require('assert');
 
 var argparse = require('../lib/argparse');
 
-vows
+var ArgumentParserTest = vows
 .describe('ArgumentParser class')
 .addBatch({ // Batch are executed sequentially
 
@@ -37,7 +37,28 @@ vows
         }
 
     }
-    
+
+}); // Export the Suite
 
 
-}).export(module); // Export the Suite
+/**
+ *
+ */
+var ActionTest = vows
+.describe('Action class')
+.addBatch({
+	'Constructor ': {
+		topic: function (item) {// Topic
+			return new argparse.Action({nargs : 5});
+		},
+		'should return the action like className(attributes)': function (topic) {// Vow
+		    assert.equal(topic.toString(), 'Action({"optionStrings":[],"nargs":5,"required":false})');
+		},
+		'should throw exception': function (topic) {// Vow
+		    assert.throws("topic.call();");
+		}
+	}
+});
+
+exports.ArgumentParserTest = ArgumentParserTest;
+exports.ActionTest = ActionTest;
