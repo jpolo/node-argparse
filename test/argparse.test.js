@@ -44,12 +44,20 @@ var ArgumentParserTest = vows
 var ActionTest = vows
 .describe('Action class')
 .addBatch({
-	'Constructor ': {
+	'new Action({options}) ': {
 		topic: function (item) {// Topic
 			return new argparse.Action({nargs : 5});
 		},
-		'should return the action like className(attributes)': function (topic) {// Vow
-		    assert.equal(topic.toString(), 'Action({"optionStrings":[],"nargs":5,"required":false})');
+		'should initialize arguments': function(topic) {
+			assert.equal(topic.nargs, 5);
+		},
+		'should be represented as <className:{attributes}>': function (topic) {// Vow
+		    assert.equal(topic.toString(), '<Action:{optionStrings=[], nargs=5, required=false}>');
+		}
+	},
+	'call() ': {
+		topic: function (item) {// Topic
+			return new argparse.Action();
 		},
 		'should throw exception': function (topic) {// Vow
 		    assert.throws("topic.call();");
