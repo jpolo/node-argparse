@@ -3,6 +3,9 @@ var assert = require('assert');
 
 var argparse = require('../lib/argparse');
 
+/**
+ * ArgumentParser Test class
+ */
 var ArgumentParserTest = vows
 .describe('ArgumentParser class')
 .addBatch({ // Batch are executed sequentially
@@ -24,22 +27,82 @@ var ArgumentParserTest = vows
 		topic: function (item) {// Topic
 			return new argparse.ArgumentParser({program: 'foo'});
 		},
-		"should set program to 'foo'": function (topic) {// Vow
+		"should set program to 'foo'": function (topic) {
 			assert.equal(topic.program, 'foo');
 		},
-		'should set the default help formatter': function (topic) {// Vow
+		'should set the default help formatter': function (topic) {
             assert.equal(topic.formatterClass, 'HelpFormatter');
         },
-		'should set version as undefined': function (topic) {// Vow
+		'should set version as undefined': function (topic) {
             assert.isUndefined(topic.version);
         }
+	},
+	"_getFormatter() ": {
+		topic: function (item) {// Topic
+			return new argparse.ArgumentParser({program: 'foo'});
+		},
+		"should return <HelpFormatter> object for default configuration": function (topic) {
+			var formatter = topic._getFormatter();
+			assert.ok(formatter instanceof argparse.HelpFormatter);
+			//check that the program is set to foo
+			assert.equal(formatter.program, 'foo');
+		},
+		"should return <other classes...> object if set in configuration": function (topic) {
+			['ArgumentDefaultsHelpFormatter', 'RawTextHelpFormatter', 'RawDescriptionHelpFormatter'].forEach(function(className) {
+				topic.formatterClass = className;
+				var formatter = topic._getFormatter();
+				assert.ok(formatter instanceof argparse[className]);
+			});
+			
+		}
+	},
+	'_printMessage()': {
+		topic: function (item) {// Topic
+			return new argparse.ArgumentParser({program: 'foo'});
+		},
+		"should print message into file": function (topic) {
+			var buffer = new Buffer(1024);
+			var message = 'foo bar baz';
+			topic._printMessage('foo bar baz', buffer);
+			assert.equal(buffer.toString('utf8', 0, message.length), message);
+		}
+	},
+	'formatUsage()': {
+		topic: function (item) {// Topic
+			return new argparse.ArgumentParser({program: 'foo', help: false});
+		},
+		'should return "usage: %program%" without help': function (topic) {
+			assert.equal(topic.formatUsage(), 'usage: foo\n');
+		},
+		'should return "usage: %program% help" with help': function (topic) {
+			topic.addArgument(['-h', '--help'], {
+				action : 'help',
+	        	help : 'Show this help message and exit.'
+			});
+			assert.equal(topic.formatUsage(), 'usage: foo help\n');
+		}
+	},
+	'formatHelp()': {
+		topic: function (item) {// Topic
+			return new argparse.ArgumentParser({program: 'foo', help: true});
+		},
+		'should return "usage: %program%" without help': function (topic) {
+			assert.equal(topic.formatHelp(), 'usage: foo\n');
+		},
+		'should return "usage: %program% help" with help': function (topic) {
+			topic.addArgument(['-h', '--help'], {
+				action : 'help',
+	        	help : 'Show this help message and exit.'
+			});
+			assert.equal(topic.formatHelp(), 'usage: foo help\n');
+		}
 	}
-
-}); // Export the Suite
+		
+});
 
 
 /**
- *
+ * Action Test class
  */
 var ActionTest = vows
 .describe('Action class')
@@ -53,6 +116,27 @@ var ActionTest = vows
 		},
 		'should be represented as <className:{attributes}>': function (topic) {// Vow
 		    assert.equal(topic.toString(), '<Action:{optionStrings=[], nargs=5, required=false}>');
+		}
+	},
+	'getName() ': {
+		topic: function (item) {// Topic
+			return new argparse.Action({
+				optionStrings: ['-f', '--foo'],
+				destination: 'baz',
+				metavar:'BAR'
+			});
+		},
+		'should return formatted optionStrings if set.': function (topic) {
+			assert.equal(topic.getName(), '-f/--foo');
+		},
+		'should return metavar if optionStrings is not set.': function (topic) {
+			topic.optionStrings = [];
+			assert.equal(topic.getName(), 'BAR');
+		},
+		'should return metavar if optionStrings/metavar is not set.': function (topic) {
+			topic.optionStrings = [];
+			topic.metavar =  undefined;
+			assert.equal(topic.getName(), 'baz');
 		}
 	},
 	'call() ': {
@@ -110,5 +194,5 @@ var NamespaceTest = vows
 });
 
 exports.NamespaceTest = NamespaceTest;
-exports.ArgumentParserTest = ArgumentParserTest;
 exports.ActionTest = ActionTest;
+exports.ArgumentParserTest = ArgumentParserTest;
