@@ -77,14 +77,14 @@ var ArgumentParserTest = vows
 		'should return "usage: %program% help" with help': function (topic) {
 			topic.addArgument(['-h', '--help'], {
 				action : 'help',
-	        	help : 'Show this help message and exit.'
+	        	help : 'foo bar'
 			});
 			assert.equal(topic.formatUsage(), 'usage: foo help\n');
 		}
 	},
 	'formatHelp()': {
 		topic: function (item) {// Topic
-			return new argparse.ArgumentParser({program: 'foo', help: true});
+			return new argparse.ArgumentParser({program: 'foo', help: false});
 		},
 		'should return "usage: %program%" without help': function (topic) {
 			assert.equal(topic.formatHelp(), 'usage: foo\n');
@@ -92,7 +92,7 @@ var ArgumentParserTest = vows
 		'should return "usage: %program% help" with help': function (topic) {
 			topic.addArgument(['-h', '--help'], {
 				action : 'help',
-	        	help : 'Show this help message and exit.'
+	        	help : 'foo bar'
 			});
 			assert.equal(topic.formatHelp(), 'usage: foo help\n');
 		}
