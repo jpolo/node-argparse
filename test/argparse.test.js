@@ -96,6 +96,21 @@ var ArgumentParserTest = vows
 			});
 			assert.equal(topic.formatHelp(), 'usage: foo help\n');
 		}
+		//TODO test more cases here
+	},
+	'parseArgs()': {
+		topic: function (item) {// Topic
+			var parser = new argparse.ArgumentParser({program: 'foo', help: false});
+			parser.addArgument(['-f', '--foo'], {
+				action : 'store',
+				defaultValue: 'bar'
+	        	//help : 'foo bar'
+			});
+			return parser;
+		},
+		'should do lol': function(topic) {
+			assert.equal(topic.parseArgs(['--foo', 'baz']), 'usage: foo help\n');
+		}
 	}
 		
 });
@@ -115,7 +130,8 @@ var ActionTest = vows
 			assert.equal(topic.nargs, 5);
 		},
 		'should be represented as <className:{attributes}>': function (topic) {// Vow
-		    assert.equal(topic.toString(), '<Action:{optionStrings=[], nargs=5, required=false}>');
+		    assert.equal(topic.toString(), '<Action:{optionStrings:[], nargs:5, required:false}>');
+			//TODO correct bug
 		}
 	},
 	'getName() ': {
