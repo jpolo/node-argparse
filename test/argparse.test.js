@@ -3,6 +3,20 @@ var assert = require('assert');
 
 var argparse = require('../lib/argparse');
 
+
+function ArgumentParser(options) {
+	options = options || {};
+	options.debug = options.debug == undefined ? true : options.debug;
+	options.stdout = options.stdout == undefined ? false : options.stdout;
+	options.stderr = options.stderr == undefined ? false : options.stderr;
+	return new argparse.ArgumentParser(options);
+}
+
+function Namespace(options) {
+	options = options || {};
+	return new argparse.Namespace(options);
+}
+
 /**
  * ArgumentParser Test class
  */
@@ -11,7 +25,7 @@ var ArgumentParserTest = vows
 .addBatch({ // Batch are executed sequentially
 	"new ArgumentParser({}) ": {
 		topic: function (item) {// Topic
-			return new argparse.ArgumentParser({});
+			return ArgumentParser();
 		},
 		'should set program to "node"': function (topic) {// Vow
 			assert.equal(topic.program, 'node');
@@ -25,7 +39,7 @@ var ArgumentParserTest = vows
 	},
 	"new ArgumentParser({program : 'foo'}) ": {
 		topic: function (item) {// Topic
-			return new argparse.ArgumentParser({program: 'foo'});
+			return ArgumentParser({program: 'foo'});
 		},
 		"should set program to 'foo'": function (topic) {
 			assert.equal(topic.program, 'foo');
@@ -39,7 +53,7 @@ var ArgumentParserTest = vows
 	},
 	"_getFormatter() ": {
 		topic: function (item) {// Topic
-			return new argparse.ArgumentParser({program: 'foo'});
+			return ArgumentParser({program: 'foo'});
 		},
 		"should return <HelpFormatter> object for default configuration": function (topic) {
 			var formatter = topic._getFormatter();
@@ -58,7 +72,7 @@ var ArgumentParserTest = vows
 	},
 	'_printMessage()': {
 		topic: function (item) {// Topic
-			return new argparse.ArgumentParser({program: 'foo'});
+			return ArgumentParser({program: 'foo'});
 		},
 		"should print message into file": function (topic) {
 			var buffer = new Buffer(1024);
@@ -69,7 +83,7 @@ var ArgumentParserTest = vows
 	},
 	'formatUsage()': {
 		topic: function (item) {// Topic
-			return new argparse.ArgumentParser({program: 'foo', help: false});
+			return ArgumentParser({program: 'foo', help: false});
 		},
 		'should return "usage: %program%" without help': function (topic) {
 			assert.equal(topic.formatUsage(), 'usage: foo\n');
@@ -84,7 +98,7 @@ var ArgumentParserTest = vows
 	},
 	'formatHelp()': {
 		topic: function (item) {// Topic
-			return new argparse.ArgumentParser({program: 'foo', help: false});
+			return ArgumentParser({program: 'foo', help: false});
 		},
 		'should return "usage: %program%" without help': function (topic) {
 			assert.equal(topic.formatHelp(), 'usage: foo\n');
@@ -98,30 +112,57 @@ var ArgumentParserTest = vows
 		}
 		//TODO test more cases here
 	},
-	'parseArgs()': {
+	'parseArgs() / with default argument': {
 		topic: function (item) {// Topic
-			var parser = new argparse.ArgumentParser({program: 'foo', help: false});
+			var parser = ArgumentParser({program: 'foo', help: false});
 			parser.addArgument(['-f', '--foo'], {
 				action : 'store',
-				defaultValue: 'bar'
+				defaultValue: 'defaultVal'
 	        	//help : 'foo bar'
 			});
 			return parser;
 		},
-		'should parse short syntax [-f, bar] to {foo:bar}': function(topic) {
-			var namespace = topic.parseArgs(['-f', 'bar']);
-			assert.deepEqual(topic.parseArgs(['-f', 'bar']), new argparse.Namespace({foo: 'bar'}));
+		'should parse short syntax [-f, baz] to {foo:bar}': function(topic) {
+			assert.deepEqual(topic.parseArgs(['-f', 'baz']), Namespace({foo: 'baz'}));
 		},
-		'should parse long syntax [--foo, baz] to {foo:baz}': function(topic) {
-			var namespace = topic.parseArgs(['--foo', 'baz']);
-			assert.deepEqual(topic.parseArgs(['--foo', 'baz']), new argparse.Namespace({foo: 'baz'}));
+		'should parse short explicit syntax [-f=baz] to {foo:bar}': function(topic) {
+			assert.deepEqual(topic.parseArgs(['-f=baz']), Namespace({foo: 'baz'}));
+			assert.deepEqual(topic.parseArgs(['-f=baz=notparsed']), Namespace({foo: 'baz'}));
 		},
-		'should parse [--foo] to {foo:baz}': function(topic) {
-			var namespace = topic.parseArgs(['--foo']);
-			assert.deepEqual(topic.parseArgs(['--foo']), new argparse.Namespace({foo: 'baz'}));
-		}
+		'should parse long syntax [--foo baz] to {foo:baz}': function(topic) {
+			assert.deepEqual(topic.parseArgs(['--foo', 'baz']), Namespace({foo: 'baz'}));
+		},
+		'should parse long explicit syntax [--foo baz] to {foo:baz}': function(topic) {
+			assert.deepEqual(topic.parseArgs(['--foo=baz']), Namespace({foo: 'baz'}));
+			assert.deepEqual(topic.parseArgs(['--foo=baz=notparsed']), Namespace({foo: 'baz'}));
+		},
 		
+		'should parse [--foo] to {foo:defaultVal}': function(topic) {
+			assert.deepEqual(topic.parseArgs(['--foo']), Namespace({foo: 'defaultVal'}));
+		},
+		'should parse [] to {foo:defaultVal}': function(topic) {
+			assert.deepEqual(topic.parseArgs([]), Namespace({foo: 'defaultVal'}));
+		}
+	},
+	'parseArgs() / with required argument': {
+		topic: function (item) {// Topic
+		var parser = ArgumentParser({program: 'foo'});
+		parser.addArgument(['-r', '--required'], {
+			action : 'store',
+			required:true,
+			defaultValue: 'bar'
+        	//help : 'foo bar'
+		});
+		return parser;
+	},
+	'should parse [] throwing an error': function(topic) {
+		assert.throws("topic.parseArgs([])");
+	},
+	'should parse [--foo] throwing an error': function(topic) {
+		topic.parseArgs(['--foo']);
+		assert.throws("topic.parseArgs(['--foo'])");
 	}
+}
 		
 });
 
