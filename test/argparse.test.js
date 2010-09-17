@@ -79,7 +79,7 @@ var ArgumentParserTest = vows
 				action : 'help',
 	        	help : 'foo bar'
 			});
-			assert.equal(topic.formatUsage(), 'usage: foo help\n');
+			assert.equal(topic.formatUsage(), 'usage: foo [-h]\n');
 		}
 	},
 	'formatHelp()': {
@@ -94,7 +94,7 @@ var ArgumentParserTest = vows
 				action : 'help',
 	        	help : 'foo bar'
 			});
-			assert.equal(topic.formatHelp(), 'usage: foo help\n');
+			assert.equal(topic.formatHelp(), 'usage: foo [-h]\n');
 		}
 		//TODO test more cases here
 	},
@@ -108,9 +108,19 @@ var ArgumentParserTest = vows
 			});
 			return parser;
 		},
-		'should do lol': function(topic) {
-			assert.equal(topic.parseArgs(['--foo', 'baz']), 'usage: foo help\n');
+		'should parse short syntax [-f, bar] to {foo:bar}': function(topic) {
+			var namespace = topic.parseArgs(['-f', 'bar']);
+			assert.deepEqual(topic.parseArgs(['-f', 'bar']), new argparse.Namespace({foo: 'bar'}));
+		},
+		'should parse long syntax [--foo, baz] to {foo:baz}': function(topic) {
+			var namespace = topic.parseArgs(['--foo', 'baz']);
+			assert.deepEqual(topic.parseArgs(['--foo', 'baz']), new argparse.Namespace({foo: 'baz'}));
+		},
+		'should parse [--foo] to {foo:baz}': function(topic) {
+			var namespace = topic.parseArgs(['--foo']);
+			assert.deepEqual(topic.parseArgs(['--foo']), new argparse.Namespace({foo: 'baz'}));
 		}
+		
 	}
 		
 });
@@ -131,7 +141,6 @@ var ActionTest = vows
 		},
 		'should be represented as <className:{attributes}>': function (topic) {// Vow
 		    assert.equal(topic.toString(), '<Action:{optionStrings:[], nargs:5, required:false}>');
-			//TODO correct bug
 		}
 	},
 	'getName() ': {
