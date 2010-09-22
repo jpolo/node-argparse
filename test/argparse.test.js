@@ -62,7 +62,7 @@ var ArgumentParserTest = vows
 			assert.equal(formatter.program, 'foo');
 		},
 		"should return <other classes...> object if set in configuration": function (topic) {
-			['ArgumentDefaultsHelpFormatter', 'RawTextHelpFormatter', 'RawDescriptionHelpFormatter'].forEach(function(className) {
+			['HelpFormatterArgumentDefaults', 'HelpFormatterRawText', 'HelpFormatterRawDescription'].forEach(function(className) {
 				topic.formatterClass = className;
 				var formatter = topic._getFormatter();
 				assert.ok(formatter instanceof argparse[className]);
@@ -159,8 +159,7 @@ var ArgumentParserTest = vows
 		assert.throws("topic.parseArgs([])");
 	},
 	'should parse [--foo] throwing an error': function(topic) {
-		topic.parseArgs(['--foo']);
-		assert.throws("topic.parseArgs(['--foo'])");
+		assert.throws("topic.parseArgs(['--foo'])");//TODO : find way to check the error type
 	}
 }
 		
@@ -179,9 +178,6 @@ var ActionTest = vows
 		},
 		'should initialize arguments': function(topic) {
 			assert.equal(topic.nargs, 5);
-		},
-		'should be represented as <className:{attributes}>': function (topic) {// Vow
-		    assert.equal(topic.toString(), '<Action:{optionStrings:[], nargs:5, required:false}>');
 		}
 	},
 	'getName() ': {
