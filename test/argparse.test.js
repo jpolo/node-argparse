@@ -249,6 +249,14 @@ exports.NamespaceTest = vows.describe('Namespace class').addBatch( {
 			assert.equal(topic.get('foo'), 'bar');
 			topic.set('foo', 'foofoo');
 			assert.equal(topic.get('foo'), 'foofoo');
+		},
+		'should return set many value if called as set({key: value, ...})' : function(topic) {
+			topic.set( {
+				myId : 'helloworld2',
+				key2 : 'lol'
+			});
+			assert.equal(topic.get('myId'), 'helloworld2');
+			assert.equal(topic.get('key2'), 'lol');
 		}
 	}
 });
