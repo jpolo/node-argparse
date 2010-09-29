@@ -208,7 +208,7 @@ exports.ActionStoreFalseTest = vows.describe('ActionStoreFalse class').addBatch(
 exports.NamespaceTest = vows.describe('Namespace class').addBatch( {
 	"new Namespace({options}) " : {
 		topic : function(item) {// Topic
-			return new argparse.Namespace( {
+			return Namespace( {
 				foo : 'bar',
 				baz : 6
 			});
@@ -218,9 +218,9 @@ exports.NamespaceTest = vows.describe('Namespace class').addBatch( {
 			assert.equal(topic.baz, 6);
 		}
 	},
-	"Namespace.get(key) " : {
+	"get(key) " : {
 		topic : function(item) {// Topic
-			return new argparse.Namespace( {
+			return Namespace( {
 				foo : 'bar',
 				baz : 6
 			});
@@ -234,9 +234,9 @@ exports.NamespaceTest = vows.describe('Namespace class').addBatch( {
 			assert.equal(topic.get('baz'), topic.baz);
 		}
 	},
-	"Namespace.set(key, value) " : {
+	"set(key, value) " : {
 		topic : function(item) {// Topic
-			return new argparse.Namespace( {
+			return Namespace( {
 				foo : 'bar',
 				baz : 6
 			});
@@ -257,6 +257,73 @@ exports.NamespaceTest = vows.describe('Namespace class').addBatch( {
 			});
 			assert.equal(topic.get('myId'), 'helloworld2');
 			assert.equal(topic.get('key2'), 'lol');
+		}
+	},
+	"isset() " : {
+		topic : function(item) {// Topic
+			return Namespace();
+		},
+		'should return false if key does not exists' : function(topic) {
+			assert.equal(topic.isset('fsdqfjdlk'), false);
+		},
+		'should return true if key exists' : function(topic) {
+			topic.set('myId', 'helloworld');
+			assert.equal(topic.isset('myId'), true);
+		}
+	},
+	"unset()" : {
+		topic : function(item) {// Topic
+			return Namespace();
+		},
+		'should return this' : function(topic) {
+			assert.equal(topic.unset('jakhhk', {}), topic);
+		},
+		'should delete element if existing' : function(topic) {
+			topic.set('myId', 'helloworld');
+			assert.equal(topic.isset('myId'), true);
+			topic.unset('myId');
+			assert.equal(topic.isset('myId'), false);
+		}
+	},
+	"pop()" : {
+		topic : function(item) {
+			return Namespace();
+		},
+		'should return default param if key does not exist' : function(topic) {
+			assert.equal(topic.pop('jakhhk', 'defaultValue'), 'defaultValue');
+		},
+		'should delete element and return this element' : function(topic) {
+			topic.set('myId', 'helloworld');
+			assert.equal(topic.isset('myId'), true);
+			var result = topic.pop('myId', 'defaultValue');
+			assert.equal(topic.isset('myId'), false);
+			assert.equal(result, 'helloworld');
+		}
+	},
+	"keys()" : {
+		topic : function(item) {
+			return Namespace();
+		},
+		'should return array containing all data keys' : function(topic) {
+			topic.set('foo', 1);
+			assert.deepEqual(topic.keys(), [ 'foo' ]);
+			topic.set('bar', 2);
+			assert.deepEqual(topic.keys(), [ 'foo', 'bar' ]);
+			topic.unset('foo');
+			assert.deepEqual(topic.keys(), [ 'bar' ]);
+		}
+	},
+	"values()" : {
+		topic : function(item) {
+			return Namespace();
+		},
+		'should return array containing all data keys' : function(topic) {
+			topic.set('foo', 1);
+			assert.deepEqual(topic.values(), [ 1 ]);
+			topic.set('bar', 2);
+			assert.deepEqual(topic.values(), [ 1, 2 ]);
+			topic.unset('foo');
+			assert.deepEqual(topic.values(), [ 2 ]);
 		}
 	}
 });
