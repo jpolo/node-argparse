@@ -3,8 +3,26 @@
   "version" : "0.1",
   "author" : "Julien Polo <julien.polo@altshift.fr>",
   "description" : "An argparser inspired by the python module",
-  "keywords" : ["parser", "arg", "cli"],
-  "directories" : { "lib" : "lib" , "test": "test"},
-  "dependencies"  : {"vows": ">=0.1"},
+  "keywords" : ["parser", "arg", "cli", "console", "options"],
+  "repository" : { 
+  	  "type" : "git",
+  	  "url" : "git://github.com/as-jpolo/node-argparse.git"
+  },
+  "bugs" : { 
+  	  "web" : "http://github.com/as-jpolo/node-argparse/issues" 
+  },
+  "directories" : {
+  	  "lib" : "lib" ,
+      "test": "test"
+  },
+  "dependencies"  : {
+  	  "vows": "*"
+  },
+  "licenses" :[ 
+  	{ 
+  		"type" : "MIT",
+    	"url" : "http://github.com/as-jpolo/node-argparse/blob/master//LICENSE"
+    }   
+  ],
   "main" : "lib/argparse"
 }

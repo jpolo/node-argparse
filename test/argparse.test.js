@@ -464,7 +464,7 @@ exports.ArgumentParserTest = vows.describe('ArgumentParser class').addBatch( { /
 						foo : 'baz'
 					}));
 				},
-				'should parse long explicit syntax [--foo baz] to {foo:baz}' : function(topic) {
+				'should parse long explicit syntax [--foo=baz] to {foo:baz}' : function(topic) {
 					assert.deepEqual(topic.parseArgs( [ '--foo=baz' ]), Namespace( {
 						foo : 'baz'
 					}));
@@ -472,7 +472,6 @@ exports.ArgumentParserTest = vows.describe('ArgumentParser class').addBatch( { /
 						foo : 'baz'
 					}));
 				},
-
 				'should parse [--foo] to {foo:defaultVal}' : function(topic) {
 					assert.deepEqual(topic.parseArgs( [ '--foo' ]), Namespace( {
 						foo : 'defaultVal'

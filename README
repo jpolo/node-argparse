@@ -1,0 +1,25 @@
+node-argparse package for nodejs
+
+DESCRIPTION:
+
+
+HOW TO INSTALL:
+
+ 1. Install plugin `git clone git://github.com/as-jpolo/node-argparse.git .`
+ 2. Include the library in your path
+
+CHANGELOG:
+
+0.1
+
+# Still under development
+# Basic regular and explicit argument syntax are supported
+
+TODO:
+
+# Write more tests
+# Publish on NPM
+
+CONTRIBUTION:
+
+Contributions are welcome, feel free to push changes on github.
