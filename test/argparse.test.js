@@ -501,10 +501,53 @@ exports.ArgumentParserTest = vows.describe('ArgumentParser class').addBatch( { /
 					});
 				},
 				'should parse [--foo] throwing an error' : function(topic) {
+
 					assert.throws(function() {
-						topic.parseArgs( [ '--foo' ]);
-					});// TODO : find way to check the error type
-			}
+						topic.parseArgs( [ '--foo' ]);// TODO find way to check the error type
+						});
+				}
+			},
+			'parseArgs() / with type cast' : {
+				topic : function(item) {// Topic
+					var parser = ArgumentParser( {
+						program : 'foo'
+					});
+
+					return parser;
+				},
+				'should parse integer' : function(topic) {
+					topic.addArgument( [ '--integer' ], {
+						action : 'store',
+						type : 'int'
+					});
+					var data = topic.parseArgs( [ '--integer', '2' ]);
+					assert.strictEqual(data.integer, 2);
+					assert.notStrictEqual(data.integer, '2');
+					assert.throws(function() {
+						topic.parseArgs( [ '--integer', 'fkldsjfl' ]);
+					});
+				},
+				'should parse float' : function(topic) {
+					topic.addArgument( [ '--float' ], {
+						action : 'store',
+						type : 'float'
+					});
+					var data = topic.parseArgs( [ '--float', '1.2' ]);
+					assert.strictEqual(data.float, 1.2);
+					assert.notStrictEqual(data.integer, '1.2');
+					assert.throws(function() {
+						topic.parseArgs( [ '--float', 'fkldsjfl' ]);
+					});
+				},
+				'should parse string' : function(topic) {
+					topic.addArgument( [ '--string' ], {
+						action : 'store',
+						type : 'string'
+					});
+					var data = topic.parseArgs( [ '--string', 'toto' ]);
+					assert.strictEqual(data.string, 'toto');
+
+				}
 			}
 
 		});
