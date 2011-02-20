@@ -11,6 +11,7 @@
   "bugs" : { 
   	  "web" : "http://github.com/as-jpolo/node-argparse/issues" 
   },
+  "main" : "lib/argparse"
   "directories" : {
   	  "lib" : "lib" ,
       "test": "test"
@@ -24,6 +25,5 @@
   		"type" : "MIT",
     	"url" : "http://github.com/as-jpolo/node-argparse/blob/master//LICENSE"
     }   
-  ],
-  "main" : "lib/argparse"
+  ]
 }
