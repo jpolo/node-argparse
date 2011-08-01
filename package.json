@@ -1,27 +1,33 @@
 {
-  "name" : "argparse",
-  "version" : "0.1.2-3",
-  "author" : "Julien Polo <julien.polo@altshift.fr>",
-  "description" : "An argparser inspired by the python module",
-  "keywords" : ["parser", "arg", "cli", "console", "options"],
-  "repository" : { 
-  	  "type" : "git",
-  	  "url" : "git://github.com/jpolo/node-argparse.git"
-  },
-  "bugs" : { 
-  	  "web" : "http://github.com/jpolo/node-argparse/issues" 
-  },
-  "main" : "lib/argparse"
-  "directories" : {
-  	  "lib" : "lib" ,
-      "test": "test"
-  },
-  "dependencies"  : {
-  },
-  "licenses" :[ 
-  	{ 
-  		"type" : "MIT",
-    	"url" : "http://github.com/jpolo/node-argparse/blob/master//LICENSE"
+    "name": "argparse",
+    "version": "0.1.3",
+    "author": { 
+        "name" : "Julien Polo",
+        "email" : "julien.polo@gmail.com",
+        "url" : "http://github.com/jpolo"
+    },
+    "description": "An argparser inspired by the python module",
+    "keywords": ["parser", "arg", "cli", "console", "options"],
+    "repository": { 
+        "type" : "git",
+        "url" : "git://github.com/jpolo/node-argparse.git"
+    },
+    "bugs": { 
+        "web" : "http://github.com/jpolo/node-argparse/issues" 
+    },
+    "main": "lib/argparse",
+    "directories": {
+        "lib": "lib",
+        "test": "test"
+    },
+    "dependencies": {
+    },
+    "devDependencies": {
+    },
+    "licenses": [ 
+    { 
+        "type": "MIT",
+        "url": "http://github.com/jpolo/node-argparse/blob/master//LICENSE"
     }   
-  ]
+    ]
 }
